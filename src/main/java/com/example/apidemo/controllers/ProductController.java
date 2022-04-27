@@ -51,6 +51,10 @@ public class ProductController {
 	// Product [id=2, productName=macbook, year=2020, price=2000.0, url=]
 	@PostMapping("/insert")
 	public ResponseEntity<ResponseObject> insertProduct(@RequestBody Product newPostProduct) {
+		List<Product> listProduct = _productRepository.findByProductName(newPostProduct.getProductName().trim());
+		if (listProduct.size() > 0) {
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Product is exists", ""));
+		}
 		return ResponseEntity.status(HttpStatus.OK).body(
 				new ResponseObject("ok", "insert products successfully", _productRepository.save(newPostProduct)));
 
